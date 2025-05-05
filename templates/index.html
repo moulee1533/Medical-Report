@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medical Report Analyzer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+    
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+    
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            letter-spacing: -1px;
+        }
+    
+        form {
+            text-align: center;
+            margin: 40px 0;
+        }
+    
+        input[type="file"] {
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px dashed #c3cfe2;
+            border-radius: 10px;
+            width: 70%;
+            margin-right: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+    
+        input[type="file"]:hover {
+            border-color: #6c5ce7;
+            background: #fff;
+        }
+    
+        button {
+            padding: 15px 35px;
+            background: linear-gradient(45deg, #6c5ce7, #a363d9);
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+    
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108,92,231,0.3);
+        }
+    
+        hr {
+            margin: 40px 0;
+            border: 1px solid #eee;
+        }
+    
+        h3 {
+            color: #2c3e50;
+            margin-top: 30px;
+            font-size: 1.4em;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+    
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+    
+        li {
+            padding: 12px 20px;
+            margin: 8px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+    
+        li:hover {
+            transform: translateX(10px);
+        }
+    
+        .risk-high {
+            color: #e74c3c;
+            font-weight: bold;
+            background: #fde8e8;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+    
+        .risk-moderate {
+            color: #f1c40f;
+            font-weight: bold;
+            background: #fcf3cf;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+    
+        .risk-normal {
+            color: #2ecc71;
+            font-weight: bold;
+            background: #e8f6ef;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+    
+        p a {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 25px;
+            background: #6c5ce7;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+    
+        p a:hover {
+            background: #5b4bc4;
+        }
+    
+        p a::before {
+            content: "📄";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+    
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 20px;
+            }
+            
+            input[type="file"] {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <h2>Upload Medical Report (PDF or Image)</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="report" required>
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if results %}
+        <hr>
+        <h3>Detected Sugar Values:</h3>
+        <ul>
+            {% for key, value in results.items() %}
+                <li><b>{{ key }}</b>: {{ value }}</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Risk Level:
+            <span class="{% if risk == 'High Risk' %}risk-high{% elif risk == 'Moderate Risk' %}risk-moderate{% else %}risk-normal{% endif %}">
+                {{ risk }}
+            </span>
+        </h3>
+
+        <h3>Suggestions:</h3>
+        <ul>
+            {% for tip in tips %}
+                <li><b>{{ tip[0] }}</b>: {{ tip[1] }}</li>
+            {% endfor %}
+        </ul>
+
+        <p><a href="/uploads/{{ pdf_url }}" target="_blank">📄 Download Report as PDF</a></p>
+        <form method="POST" enctype="multipart/form-data">
+            <button type="button" onclick="window.location.href='/'">Clear</button>
+        </form>
+        
+    {% endif %}
+</div>
+<script>
+
+</script>
+</body>
+</html>
